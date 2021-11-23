@@ -195,3 +195,76 @@ print(grid.fit(x_train,y_train))
 
 # To  find the parameters giving maximum accuracy
 print(grid.best_params_)
+
+# Create new model using the same parameters
+new_model=XGBClassifier(learning_rate= 0.001, max_depth= 3, n_estimators= 10)
+print(new_model.fit(x_train, y_train))
+
+y_pred_new = new_model.predict(x_test)
+predictions_new = [round(value) for value in y_pred_new]
+accuracy_new = accuracy_score(y_test,predictions_new)
+print(accuracy_new)
+
+
+## Regex Application
+
+comment = data['text'][5]
+comment_full = data['text']
+print(comment_full)
+
+print(comment)
+
+regex = r"@\w+"
+
+print(re.findall(regex, comment))
+
+# utilising iterator
+temp_comment = [re.findall(regex, i) for i in data['text']]
+print(temp_comment)
+
+# isolating a single entry from the list temp_comment
+temp_temp = temp_comment[3][0]
+print(temp_temp)
+
+print(temp_temp.replace(r"@\w+", ""))
+
+
+#defining a regex function that can be re-used at a later point
+temp_string = re.sub(regex, "", comment)
+print(temp_string)
+
+
+#defining a regex function that can be re-used at a later point
+# inner_regex = re.sub(regex, "", text)
+# defining custom function
+
+def custom_funk(text):
+    inner_regex = re.sub(regex, "", text)
+
+    # using iterator for applying custom function throughout all entries of tweets
+
+    for i in comment_full:
+        return inner_regex
+
+    # Replace all matches with empty string
+    #   print(re.sub(regex, "", i))
+
+data['cleaned_tweets'] = [custom_funk(i) for i in comment_full]
+print(data['cleaned_tweets'][0:10])
+print(data['cleaned_tweets'])
+
+
+## API Data Pull
+#retrieving loan approval rates for the US state of California
+response = requests.get("https://api.usmart.io/org/ae1d5c14-c392-4c3f-9705-537427eeb413/ab922b0e-b5d2-435f-b1f3-c35fb8a4b9e4/1/urql")
+
+# response code of 200 indicates successful sending and retrieval from both servers for the above GET request
+print(response.status_code)
+
+# Printing the corresspinding dataset in text format
+print(response.text)
+
+
+#returning the associated key value pairs contained within the dataset
+API_data = response.json()
+print(API_data)
